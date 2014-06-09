@@ -1,13 +1,21 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html ng-app="lifeCounter">
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <script type="text/javascript" src="scripts/angular.min.js"></script>
+    <script type="text/javascript" src="scripts/angular/angular.js"></script>
     <script type="text/javascript" src="scripts/app.js"></script>
     <script type="text/javascript" src="scripts/playerModule/player.js"></script>
 </head>
-<body>
+<body ng-controller="GameController as game">
+<div><a href ng-click="game.restart()">New game</a><a href ng-click="game.addPlayer()">Add player</a></div>
+	<div>
+		<div ng-repeat="player in game.players">
+			<h1>{{player.name}}</h1>
+			<p>Life: {{player.life}}</p>
+			<p>Poison: {{player.poison}}</p>
+		</div>
+	</div>
 
 </body>
 </html>
