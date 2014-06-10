@@ -11,7 +11,8 @@
 				'name': 'Player ' + (self.players.length +1), 
 				'life': 40, 
 				'poison':0,
-				'generalDamage': []
+				'generalDamage': [],
+				'record': []
 			}
 			for(var i=0, len = self.players.length; i<len; i++){
 				newPlayer.generalDamage.push({
@@ -29,18 +30,32 @@
 			
 		};
 		
-		this.updatePlayerLife = function(amount, player){
-			player.life += amount;
+		this.setActiveAttr = function($event, attr, player){
+			var activeElem = document.getElementsByClassName('active')[0];
+			if(activeElem){
+				activeElem.className = activeElem.className.replace(' active', '');
+			}
+			$event.target.className += " active";
+			self.activeAttr = {
+				'attr': attr,
+				'player': player
+			};
 		};
 		
-		this.updatePlayerPoison = function(amount, player){
-			player.poison += amount;
-		};
+		this.updateActiveAttr = function(amount){
+			if(self.activeAttr){
+				self.activeAttr.player[self.activeAttr.attr] += amount;
+				self.activeAttr.player.record.push(self.activeAttr.attr + ': ' + amount);
+			}
+			if(self.activeAttr.attr !== 'life' && self.activeAttr.player[self.activeAttr.attr] < 0){
+				self.activeAttr.player[self.activeAttr.attr] = 0;
+			}
+		}
 		
 		this.setPlayerRenaming = function($event, player, val){
 			player.renaming = val;
 			if(val){
-				setTimeout(function(){$event.target.parentNode.getElementsByTagName('input')[0].select();}, 0);
+				setTimeout(function(){$event.target.parentNode.getElementsByTagName('input')[0].focus(true);}, 0);
 			}
 			if(!player.name){
 				player.name = 'Player';
@@ -56,11 +71,5 @@
 		self.restart();
 		
 	});
-	
-	/*app.directive('player', function(){
-		return {
-			'restrict': 'E',
-			'templateUrl: 'scripts/playerModule/player.html'
-		};
-	});*/
+
 })();

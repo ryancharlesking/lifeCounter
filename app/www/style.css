@@ -1,6 +1,9 @@
 html, body{
 	margin: 0;
 	paddin: 0;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
 }
 
 #headerContainer{
@@ -43,7 +46,13 @@ html, body{
 }
 
 .buttonContainer{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	text-align: center;
+	background: #666;
+	padding: 5px;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -53,11 +62,13 @@ html, body{
 }
 
 .buttonContainer span{
-	padding: 0 5px;
-	border: 1px solid;
+	padding: 0 10px;
+	border: 1px solid #333;
+	margin: 0 10px;
 	background: green;
 	display: inline-block;
 	text-align: center;
+	font-size: 24px;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -74,10 +85,10 @@ html, body{
 	background: red;
 }
 
-.life, .poison{
+.life, .poison, .generals{
 	text-align: center;
 	font-size: 35px;
-	border: 1px solid #ccc;
+	border: 1px solid #333;
 	margin: 5px 0px;
 }
 
@@ -87,4 +98,13 @@ html, body{
 
 .poison{
 	background: rgba(0,255,0, .3);
+}
+
+.general{
+	font-size: 14px;
+	background: #ccc;
+}
+
+.active{
+	background: rgba(15,150,180,.6) !important;
 }
