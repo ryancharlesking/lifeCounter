@@ -55,7 +55,11 @@
 		this.setPlayerRenaming = function($event, player, val){
 			player.renaming = val;
 			if(val){
-				setTimeout(function(){$event.target.parentNode.getElementsByTagName('input')[0].focus(true);}, 0);
+				setTimeout(function(){
+					var input = $event.target.parentNode.getElementsByTagName('input')[0];
+					input.focus(true);
+					input.click();
+				}, 0);
 			}
 			if(!player.name){
 				player.name = 'Player';
