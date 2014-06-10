@@ -5,28 +5,37 @@
     <title></title>
     <script type="text/javascript" src="scripts/angular/angular.js"></script>
     <script type="text/javascript" src="scripts/app.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body ng-controller="GameController as game">
-<div><a href ng-click="game.restart()">New game</a><a href ng-click="game.addPlayer()">Add player</a></div>
-	<div>
-		<div ng-repeat="player in game.players">
-			<h1>{{player.name}}</h1>
-			<div>Life: {{player.life}}</div>
-			<div>
-				<span ng-click="game.updatePlayerLife(-1, player)">-1</span>
-				<span ng-click="game.updatePlayerLife(-5, player)">-5</span>
+<div id="headerContainer"><a id="start" href ng-click="game.restart()">New game</a><a id="addPlayer" href ng-click="game.addPlayer()">Add player</a></div>
+<div class="fullWidthContainer">
+	<div id="players" style="width: {{game.players.length*135}}px;">
+		<div class="player" ng-repeat="player in game.players">
+			<h1 ng-show="!player.renaming" ng-click="game.setPlayerRenaming($event, player, true)">{{player.name}}</h1>
+			<input ng-show="player.renaming" type="text" ng-model="player.name" ng-blur="game.setPlayerRenaming($event, player, false)" />
+			<div class="life">{{player.life}}</div>
+			<div class="buttonContainer">
+				<span class="negative" ng-click="game.updatePlayerLife(-1, player)">1</span>
+				<span class="negative" ng-click="game.updatePlayerLife(-5, player)">5</span>
 				<span ng-click="game.updatePlayerLife(1, player)">1</span>
 				<span ng-click="game.updatePlayerLife(5, player)">5</span>
 			</div>
-			<div>Poison: {{player.poison}}</div>
-			<div>
-				<span ng-click="game.updatePlayerPoison(-1, player)">-1</span>
-				<span ng-click="game.updatePlayerPoison(-5, player)">-5</span>
+			<div class="poison">{{player.poison}}</div>
+			<div class="buttonContainer">
+				<span class="negative" ng-click="game.updatePlayerPoison(-1, player)">1</span>
+				<span class="negative" ng-click="game.updatePlayerPoison(-5, player)">5</span>
 				<span ng-click="game.updatePlayerPoison(1, player)">1</span>
 				<span ng-click="game.updatePlayerPoison(5, player)">5</span>
 			</div>
+			<div class="generals">
+				<div class="general" ng-repeat="general in player.generalDamage">
+					{{general.player.name}}: {{general.damage}}
+				</div>
+			</div>
 		</div>
 	</div>
+</div>
 
 </body>
 </html>

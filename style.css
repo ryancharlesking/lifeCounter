@@ -1,0 +1,90 @@
+html, body{
+	margin: 0;
+	paddin: 0;
+}
+
+#headerContainer{
+	padding: 5px;
+	background: #666;
+	overflow:hidden;
+}
+
+#headerContainer a{
+	text-decoration: none;
+	color: #fff;
+}
+
+#headerContainer a:visited{
+	color: #fff;
+}
+
+#start{
+	float: left;
+}
+
+#addPlayer{
+	float:right;
+}
+
+.fullWidthContainer{
+	width: 100%;
+	overflow: auto;
+	overflow-y: hidden;
+}
+
+.player{
+	display: inline-block;
+	margin: 10px;
+	width: 115px;
+}
+
+.player input{
+	width: 100px;
+}
+
+.buttonContainer{
+	text-align: center;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.buttonContainer span{
+	padding: 0 5px;
+	border: 1px solid;
+	background: green;
+	display: inline-block;
+	text-align: center;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.buttonContainer span:hover{
+	cursor:pointer;
+}
+
+.buttonContainer .negative{
+	background: red;
+}
+
+.life, .poison{
+	text-align: center;
+	font-size: 35px;
+	border: 1px solid #ccc;
+	margin: 5px 0px;
+}
+
+.life{
+	background: rgba(255,0,0, .3);
+}
+
+.poison{
+	background: rgba(0,255,0, .3);
+}
