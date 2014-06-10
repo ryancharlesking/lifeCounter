@@ -5,15 +5,26 @@
     <title></title>
     <script type="text/javascript" src="scripts/angular/angular.js"></script>
     <script type="text/javascript" src="scripts/app.js"></script>
-    <script type="text/javascript" src="scripts/playerModule/player.js"></script>
 </head>
 <body ng-controller="GameController as game">
 <div><a href ng-click="game.restart()">New game</a><a href ng-click="game.addPlayer()">Add player</a></div>
 	<div>
 		<div ng-repeat="player in game.players">
 			<h1>{{player.name}}</h1>
-			<p>Life: {{player.life}}</p>
-			<p>Poison: {{player.poison}}</p>
+			<div>Life: {{player.life}}</div>
+			<div>
+				<span ng-click="game.updatePlayerLife(-1, player)">-1</span>
+				<span ng-click="game.updatePlayerLife(-5, player)">-5</span>
+				<span ng-click="game.updatePlayerLife(1, player)">1</span>
+				<span ng-click="game.updatePlayerLife(5, player)">5</span>
+			</div>
+			<div>Poison: {{player.poison}}</div>
+			<div>
+				<span ng-click="game.updatePlayerPoison(-1, player)">-1</span>
+				<span ng-click="game.updatePlayerPoison(-5, player)">-5</span>
+				<span ng-click="game.updatePlayerPoison(1, player)">1</span>
+				<span ng-click="game.updatePlayerPoison(5, player)">5</span>
+			</div>
 		</div>
 	</div>
 

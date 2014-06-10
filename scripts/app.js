@@ -4,12 +4,7 @@
 		
 		var self = this;
 		
-		var initialPlayers = [{
-			'name': 'Player 1', 'life': 40, 'poison':0
-		},{
-			'name': 'Player 2', 'life': 40, 'poison':0
-		}];
-		this.players = initialPlayers.concat();
+		this.players = [];
 		
 		this.addPlayer = function(){
 			self.players.push({
@@ -19,9 +14,23 @@
 			});
 		};
 		
-		this.restart = function(){
-			self.players = initialPlayers.concat();
+		this.updatePlayerLife = function(amount, player){
+			player.life += amount;
 		};
+		
+		this.updatePlayerPoison = function(amount, player){
+			player.poison += amount;
+		};
+		
+		this.restart = function(){
+			self.players = [{
+				'name': 'Player 1', 'life': 40, 'poison':0
+			},{
+				'name': 'Player 2', 'life': 40, 'poison':0
+			}];
+		};
+		
+		self.restart();
 		
 	});
 	
