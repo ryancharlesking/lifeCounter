@@ -19,7 +19,7 @@
 			<div class="life" ng-click="game.setActiveAttr($event, 'life', player)">{{player.life}}</div>
 			<div class="poison" ng-click="game.setActiveAttr($event, 'poison', player)">{{player.poison}}</div>
 			<div class="generals">
-				<div class="general" ng-repeat="general in player.generalDamage" ng-click="game.setActiveAttr($event, 'damage', general)">
+				<div class="general" ng-repeat="general in player.generalDamage" ng-click="game.setActiveAttr($event, 'damage', player, general)">
 					{{general.player.name}}: {{general.damage}}
 				</div>
 			</div>

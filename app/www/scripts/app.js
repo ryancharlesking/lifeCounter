@@ -30,7 +30,7 @@
 			
 		};
 		
-		this.setActiveAttr = function($event, attr, player){
+		this.setActiveAttr = function($event, attr, player, general){
 			var activeElem = document.getElementsByClassName('active')[0];
 			if(activeElem){
 				activeElem.className = activeElem.className.replace(' active', '');
@@ -38,17 +38,23 @@
 			$event.target.className += " active";
 			self.activeAttr = {
 				'attr': attr,
-				'player': player
+				'player': player,
+				'general': general
 			};
 		};
 		
 		this.updateActiveAttr = function(amount){
-			if(self.activeAttr){
+			if(self.activeAttr.attr === 'damage'){
+				self.activeAttr.player.life -= amount;
+				self.activeAttr.general[self.activeAttr.attr] += amount;
+				self.activeAttr.player.record.push(self.activeAttr.general.player.name + ': ' + amount);
+			} else {
 				self.activeAttr.player[self.activeAttr.attr] += amount;
 				self.activeAttr.player.record.push(self.activeAttr.attr + ': ' + amount);
-			}
-			if(self.activeAttr.attr !== 'life' && self.activeAttr.player[self.activeAttr.attr] < 0){
-				self.activeAttr.player[self.activeAttr.attr] = 0;
+				
+				if(self.activeAttr.attr !== 'life' && self.activeAttr.player[self.activeAttr.attr] < 0){
+					self.activeAttr.player[self.activeAttr.attr] = 0;
+				} 
 			}
 		}
 		
