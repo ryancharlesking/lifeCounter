@@ -10,20 +10,16 @@ html, body{
 }
 
 #headerContainer{
-	padding: 5px;
 	background: #666;
 	overflow:hidden;
-	height: 22px;
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	z-index: 2;
 }
 
 #headerContainer a{
+	padding: 5px;
 	text-decoration: none;
 	color: #fff;
+	height: 22px;
+	display: inline-block;
 }
 
 #headerContainer a:visited{
@@ -41,8 +37,7 @@ html, body{
 .fullWidthContainer{
 	width: 100%;
 	overflow: auto;
-	height: 100%;
-	padding: 32px 0 40px 0;
+	height: calc(100% - 72px);
 	box-sizing: border-box;
 	z-index: 1;
 }
@@ -126,4 +121,13 @@ html, body{
 
 .active{
 	background: rgba(15,150,180,.6) !important;
+}
+
+
+.renaming .fullWidthContainer{
+	height: 100%;
+}
+
+.renaming #headerContainer, .renaming .buttonContainer{
+	display:none;
 }

@@ -45,6 +45,9 @@
 		
 		this.updateActiveAttr = function(amount){
 			if(self.activeAttr.attr === 'damage'){
+				if(amount < 0 && Math.abs(amount) > self.activeAttr.general[self.activeAttr.attr]){
+					amount = (amount/Math.abs(amount))*self.activeAttr.general[self.activeAttr.attr];
+				}
 				self.activeAttr.player.life -= amount;
 				self.activeAttr.general[self.activeAttr.attr] += amount;
 				self.activeAttr.player.record.push(self.activeAttr.general.player.name + ': ' + amount);

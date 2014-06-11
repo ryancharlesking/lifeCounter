@@ -10,8 +10,8 @@
     <script type="text/javascript" src="scripts/app.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
-<body ng-controller="GameController as game">
-<div ng-hide="game.renamingPlayer()" id="headerContainer"><a id="start" href ng-click="game.restart()">New game</a><a id="addPlayer" href ng-click="game.addPlayer()">Add player</a></div>
+<body ng-controller="GameController as game" ng-class="{renaming:game.renamingPlayer()}">
+<div id="headerContainer"><a id="start" href ng-click="game.restart()">New game</a><a id="addPlayer" href ng-click="game.addPlayer()">Add player</a></div>
 <div class="fullWidthContainer">
 	<div id="players" style="width: {{game.players.length*135}}px;">
 		<div class="player" ng-repeat="player in game.players">
@@ -29,7 +29,7 @@
 		</div>
 	</div>
 </div>
-<div class="buttonContainer" ng-hide="game.renamingPlayer()">
+<div class="buttonContainer">
 	<span class="negative" ng-click="game.updateActiveAttr(-1)">1</span>
 	<span class="negative" ng-click="game.updateActiveAttr(-5)">5</span>
 	<span ng-click="game.updateActiveAttr(1)">1</span>
