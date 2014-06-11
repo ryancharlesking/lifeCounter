@@ -72,6 +72,17 @@
 			}
 		};
 		
+		this.renamingPlayer = function(){
+			var renaming = false;
+			for(var i=0, len = self.players.length; i<len; i++){
+				if(self.players[i].renaming){
+					renaming = true;
+					break;
+				}
+			}
+			return renaming;
+		};
+		
 		this.restart = function(){
 			self.players = [];
 			self.addPlayer();

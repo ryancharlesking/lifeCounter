@@ -2,14 +2,23 @@ html, body{
 	margin: 0;
 	paddin: 0;
 	overflow: hidden;
-	width: 100%;
-	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 #headerContainer{
 	padding: 5px;
 	background: #666;
 	overflow:hidden;
+	height: 22px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 2;
 }
 
 #headerContainer a{
@@ -32,13 +41,22 @@ html, body{
 .fullWidthContainer{
 	width: 100%;
 	overflow: auto;
-	overflow-y: hidden;
+	height: 100%;
+	padding: 32px 0 40px 0;
+	box-sizing: border-box;
+	z-index: 1;
 }
 
 .player{
 	display: inline-block;
 	margin: 10px;
 	width: 115px;
+}
+
+.player h1{
+	margin: 10px 0;
+	font-size: 20px;
+	text-align: center;
 }
 
 .player input{
@@ -59,6 +77,7 @@ html, body{
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	z-index: 2;
 }
 
 .buttonContainer span{
