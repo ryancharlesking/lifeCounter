@@ -4,9 +4,13 @@
 		
 		var self = this;
 		
+		var record, updateRecordTimeout;
+		
 		this.players = [];
+		this.atticAttr = null;
 		
 		this.addPlayer = function(){
+			hapticFeedback();
 			var newPlayer = {
 				'name': 'Player ' + (self.players.length +1), 
 				'life': 40, 
@@ -31,6 +35,11 @@
 		};
 		
 		this.setActiveAttr = function($event, attr, player, general){
+			hapticFeedback();
+			if(updateRecordTimeout){
+				clearTimeout(updateRecordTimeout);
+				updateRecord();
+			}
 			var activeElem = document.getElementsByClassName('active')[0];
 			if(activeElem){
 				activeElem.className = activeElem.className.replace(' active', '');
@@ -44,13 +53,24 @@
 		};
 		
 		this.updateActiveAttr = function(amount){
+			hapticFeedback();
+			if(updateRecordTimeout) clearTimeout(updateRecordTimeout);
+			if(!record){
+				record = {
+					'value': 0,
+					'label': self.activeAttr.attr,
+					'start': self.activeAttr.player.life,
+				};
+			}
+			record['time'] = new Date().toLocaleString();
 			if(self.activeAttr.attr === 'damage'){
 				if(amount < 0 && Math.abs(amount) > self.activeAttr.general[self.activeAttr.attr]){
 					amount = (amount/Math.abs(amount))*self.activeAttr.general[self.activeAttr.attr];
 				}
 				self.activeAttr.player.life -= amount;
 				self.activeAttr.general[self.activeAttr.attr] += amount;
-				self.activeAttr.player.record.push(self.activeAttr.general.player.name + ': ' + amount);
+				record['value'] += amount;
+				record['end'] = self.activeAttr.player.life;
 			} else {
 				self.activeAttr.player[self.activeAttr.attr] += amount;
 				self.activeAttr.player.record.push(self.activeAttr.attr + ': ' + amount);
@@ -58,7 +78,11 @@
 				if(self.activeAttr.attr !== 'life' && self.activeAttr.player[self.activeAttr.attr] < 0){
 					self.activeAttr.player[self.activeAttr.attr] = 0;
 				} 
+				record['value'] += amount;
+				record['end'] = self.activeAttr.player.life;
 			}
+			updateRecordTimeout = setTimeout(updateRecord, 1000);
+			
 		}
 		
 		this.setPlayerRenaming = function($event, player, val){
@@ -87,12 +111,25 @@
 		};
 		
 		this.restart = function(){
+			hapticFeedback();
 			self.players = [];
 			self.addPlayer();
 			self.addPlayer();
 		};
 		
-		self.restart();
+		function updateRecord(){
+			self.activeAttr.player.record.push(record);
+			record = null;
+			updateRecordTimeout = null;
+		}
+		
+		function hapticFeedback(){
+			if(navigator && navigator.notification){navigator.notification.vibrate(70);}
+		}
+		
+		self.players = [];
+			self.addPlayer();
+			self.addPlayer();
 		
 	});
 

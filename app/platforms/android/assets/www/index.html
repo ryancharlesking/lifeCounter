@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html ng-app="lifeCounter">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no" />
+	<!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+	<title>Life Counter</title>
+    <script type="text/javascript" src="scripts/angular/angular.js"></script>
+    <script type="text/javascript" src="scripts/app.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body ng-controller="GameController as game" ng-class="{renaming:game.renamingPlayer()}">
+<div id="headerContainer"><a id="start" href ng-click="game.restart()">New game</a><a id="addPlayer" href ng-click="game.addPlayer()">Add player</a></div>
+<div class="fullWidthContainer">
+	<div id="players" style="width: {{game.players.length*135}}px;">
+		<div class="player" ng-repeat="player in game.players">
+			<h1>
+				<div ng-hide="player.renaming" ng-click="game.setPlayerRenaming($event, player, true)">{{player.name}}</div>
+				<form ng-submit="game.setPlayerRenaming($event, player, false)"><input ng-show="player.renaming" type="text" ng-model="player.name" ng-blur="game.setPlayerRenaming($event, player, false)" /></form>
+			</h1>
+			<div class="life" ng-click="game.setActiveAttr($event, 'life', player)">{{player.life}}</div>
+			<div class="poison" ng-click="game.setActiveAttr($event, 'poison', player)">{{player.poison}}</div>
+			<div class="generals">
+				<div class="general" ng-repeat="general in player.generalDamage" ng-click="game.setActiveAttr($event, 'damage', player, general)">
+					{{general.player.name}}: {{general.damage}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="buttonContainer">
+	<span class="negative" ng-click="game.updateActiveAttr(-1)">1</span>
+	<span class="negative" ng-click="game.updateActiveAttr(-5)">5</span>
+	<span ng-click="game.updateActiveAttr(1)">1</span>
+	<span ng-click="game.updateActiveAttr(5)">5</span>
+</div>
+
+</body>
+</html>
