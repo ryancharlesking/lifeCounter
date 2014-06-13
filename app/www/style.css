@@ -9,6 +9,19 @@ html, body{
 	bottom: 0;
 }
 
+.player form{
+	width: 100%;
+}
+
+.player form input{
+	border: 0;
+	margin: 10px 0;
+	font-size: 20px;
+	text-align: center;
+	width: 100%;
+	padding: 0;
+}
+
 #headerContainer{
 	background: #666;
 	overflow:hidden;
@@ -46,12 +59,6 @@ html, body{
 	display: inline-block;
 	margin: 10px;
 	width: 115px;
-}
-
-.player h1{
-	margin: 10px 0;
-	font-size: 20px;
-	text-align: center;
 }
 
 .player input{

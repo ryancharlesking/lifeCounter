@@ -86,12 +86,16 @@
 		}
 		
 		this.setPlayerRenaming = function($event, player, val){
+			if(player.renaming === val) return;
 			player.renaming = val;
+			var input = $event.target.parentNode.getElementsByTagName('input')[0];
 			if(val){
 				setTimeout(function(){
-					var input = $event.target.parentNode.getElementsByTagName('input')[0];
-					input.focus(true);
-					input.click();
+					input.select();
+				}, 0);
+			} else if(document.activeElement === input){
+				setTimeout(function(){				
+					input.blur();
 				}, 0);
 			}
 			if(!player.name){

@@ -7,6 +7,8 @@
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<title>Life Counter</title>
     <script type="text/javascript" src="scripts/angular/angular.js"></script>
+    <script type="text/javascript" src="phonegap.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="scripts/app.js"></script>
 	<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
@@ -15,10 +17,7 @@
 <div class="fullWidthContainer">
 	<div id="players" style="width: {{game.players.length*135}}px;">
 		<div class="player" ng-repeat="player in game.players">
-			<h1>
-				<div ng-hide="player.renaming" ng-click="game.setPlayerRenaming($event, player, true)">{{player.name}}</div>
-				<form ng-submit="game.setPlayerRenaming($event, player, false)"><input ng-show="player.renaming" type="text" ng-model="player.name" ng-blur="game.setPlayerRenaming($event, player, false)" /></form>
-			</h1>
+			<form ng-submit="game.setPlayerRenaming($event, player, false)"><input ng-blur="game.setPlayerRenaming($event, player, false)" ng-focus="game.setPlayerRenaming($event, player, true)"  type="text" ng-model="player.name" /></form>
 			<div class="life" ng-click="game.setActiveAttr($event, 'life', player)">{{player.life}}</div>
 			<div class="poison" ng-click="game.setActiveAttr($event, 'poison', player)">{{player.poison}}</div>
 			<div class="generals">
