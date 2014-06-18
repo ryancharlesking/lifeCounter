@@ -16,24 +16,10 @@
 <div id="headerContainer"><a id="start" href ng-click="game.restart()">New game</a><a id="addPlayer" href ng-click="game.addPlayer()">Add player</a></div>
 <div class="fullWidthContainer">
 	<div id="players" style="width: {{game.players.length*135}}px;">
-		<div class="player" ng-repeat="player in game.players">
-			<form ng-submit="game.setPlayerRenaming($event, player, false)"><input ng-blur="game.setPlayerRenaming($event, player, false)" ng-focus="game.setPlayerRenaming($event, player, true)"  type="text" ng-model="player.name" /></form>
-			<div class="life" ng-click="game.setActiveAttr($event, 'life', player)">{{player.life}}</div>
-			<div class="poison" ng-click="game.setActiveAttr($event, 'poison', player)">{{player.poison}}</div>
-			<div class="generals">
-				<div class="general" ng-repeat="general in player.generalDamage" ng-click="game.setActiveAttr($event, 'damage', player, general)">
-					{{general.player.name}}: {{general.damage}}
-				</div>
-			</div>
-		</div>
+		<player ng-repeat="player in game.players"></player>
 	</div>
 </div>
-<div class="buttonContainer">
-	<span class="negative" ng-click="game.updateActiveAttr(-1)">1</span>
-	<span class="negative" ng-click="game.updateActiveAttr(-5)">5</span>
-	<span ng-click="game.updateActiveAttr(1)">1</span>
-	<span ng-click="game.updateActiveAttr(5)">5</span>
-</div>
+<counters></counters>
 
 </body>
 </html>
