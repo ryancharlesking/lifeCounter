@@ -1,0 +1,8 @@
+<div class="player">
+	<form ng-submit="game.setPlayerRenaming($event, player, false)"><input ng-blur="game.setPlayerRenaming($event, player, false)" ng-focus="game.setPlayerRenaming($event, player, true)"  type="text" ng-model="player.name" /></form>
+	<div class="life" ng-click="setActiveAttribute($event, 'life')">{{player.life}}</div>
+	<div class="poison" ng-click="setActiveAttribute($event, 'poison')">{{player.poison}}</div>
+	<div class="generals">
+		<general ng-repeat="general in player.generalDamage"></general>
+	</div>
+</div>
