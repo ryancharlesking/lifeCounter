@@ -1,6 +1,8 @@
 <div class="buttonContainer">
+	<a id="start" href ng-click="game.restart()">New game</a>
 	<span class="negative" ng-click="update(-1)">1</span>
 	<span class="negative" ng-click="update(-5)">5</span>
 	<span ng-click="update(1)">1</span>
 	<span ng-click="update(5)">5</span>
+	<a id="addPlayer" href ng-click="game.addPlayer()">Add player</a>
 </div>

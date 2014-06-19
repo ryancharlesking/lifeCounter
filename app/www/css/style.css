@@ -22,12 +22,7 @@ html, body{
 	padding: 0;
 }
 
-#headerContainer{
-	background: #666;
-	overflow:hidden;
-}
-
-#headerContainer a{
+.buttonContainer a{
 	padding: 5px;
 	text-decoration: none;
 	color: #fff;
@@ -35,7 +30,7 @@ html, body{
 	display: inline-block;
 }
 
-#headerContainer a:visited{
+.buttonContainer a:visited{
 	color: #fff;
 }
 
@@ -50,7 +45,7 @@ html, body{
 .fullWidthContainer{
 	width: 100%;
 	overflow: auto;
-	height: calc(100% - 72px);
+	height: calc(100% - 40px);
 	box-sizing: border-box;
 	z-index: 1;
 }
@@ -71,7 +66,7 @@ html, body{
 	left: 0;
 	right: 0;
 	text-align: center;
-	background: #666;
+	background: #444444;
 	padding: 5px;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -80,6 +75,7 @@ html, body{
 	-ms-user-select: none;
 	user-select: none;
 	z-index: 2;
+	line-height:normal;
 }
 
 .buttonContainer span{
@@ -96,6 +92,7 @@ html, body{
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	line-height
 }
 
 .buttonContainer span:hover{
@@ -111,6 +108,7 @@ html, body{
 	font-size: 35px;
 	border: 1px solid #333;
 	margin: 5px 0px;
+	line-height: normal;
 }
 
 .life{

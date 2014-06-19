@@ -6,20 +6,42 @@
 	<!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 	<title>Life Counter</title>
-    <script type="text/javascript" src="scripts/angular/angular.js"></script>
+	<script type="text/javascript" src="scripts/ionic.bundle.js"></script>
+    <script type="text/javascript" src="scripts/factories.js"></script>
+    <script type="text/javascript" src="scripts/app.js"></script>
     <script type="text/javascript" src="phonegap.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="scripts/app.js"></script>
-	<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<link rel="stylesheet" type="text/css" href="css/ionic.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body ng-controller="GameController as game" ng-class="{renaming:game.renamingPlayer()}">
-<div id="headerContainer"><a id="start" href ng-click="game.restart()">New game</a><a id="addPlayer" href ng-click="game.addPlayer()">Add player</a></div>
-<div class="fullWidthContainer">
-	<div id="players" style="width: {{game.players.length*135}}px;">
-		<player ng-repeat="player in game.players"></player>
-	</div>
-</div>
-<counters></counters>
+	<ion-side-menus>
+
+		<!-- Center content -->
+		<ion-side-menu-content>
+		  <ion-header-bar class="bar-dark">
+		  <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+			<h1 class="title">Game</h1>
+		  </ion-header-bar>
+		  <ion-content scroll="false">
+			 <div class="fullWidthContainer">
+				<div id="players" style="width: {{game.players.length*135}}px;">
+					<player ng-repeat="player in game.players"></player>
+				</div>
+			</div>
+		<counters></counters>
+		  </ion-content>
+		</ion-side-menu-content>
+
+		<!-- Left menu -->
+		<ion-side-menu side="left">
+		  <ion-header-bar class="bar-dark">
+			<h1 class="title">Settings</h1>
+		  </ion-header-bar>
+		</ion-side-menu>
+
+	</ion-side-menus>	
 
 </body>
 </html>

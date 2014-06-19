@@ -1,5 +1,5 @@
 ﻿(function(){
-	var app = angular.module('lifeCounter', []);
+	var app = angular.module('lifeCounter', ['ionic', 'Factories']);
 	app.controller('GameController', function(){
 		var self = this;
 		
@@ -15,7 +15,7 @@
 				'life': 40, 
 				'poison':0,
 				'generalDamage': [],
-				'record': []
+				'history': []
 			}
 			for(var i=0, len = self.players.length; i<len; i++){
 				newPlayer.generalDamage.push({
@@ -31,24 +31,6 @@
 				});
 			}
 			
-		};
-		
-		this.setPlayerRenaming = function($event, player, val){
-			if(player.renaming === val) return;
-			player.renaming = val;
-			var input = $event.target.parentNode.getElementsByTagName('input')[0];
-			if(val){
-				setTimeout(function(){
-					input.select();
-				}, 0);
-			} else if(document.activeElement === input){
-				setTimeout(function(){				
-					input.blur();
-				}, 0);
-			}
-			if(!player.name){
-				player.name = 'Player';
-			}
 		};
 		
 		this.renamingPlayer = function(){
@@ -79,89 +61,93 @@
 	app.directive('general', function(){
 		return {
 			restrict: 'E',
-			controller: function($scope, Messenger){
+			controller: function($scope, DamageManager){
 				$scope.setActiveAttribute = function($event){
 					hapticFeedback();
 					highlightElement($event.target);
-					Messenger.ignore('updateAttr');
-					Messenger.listen('updateAttr', updateAttr);
+					DamageManager.setScope($scope);
 				};
 				
-				function updateAttr(val){
+				$scope.updateAttr = function(val){
 					if(val < 0 && Math.abs(val) > $scope.general.damage){
 						val = (val/Math.abs(val))*$scope.general.damage;
 					}
 					$scope.general.damage += val;
 					$scope.$parent.player.life -= val;
-					$scope.$parent.updateHistory();
+					$scope.$parent.updateHistory($scope.general.player.name + ' general', $scope.$parent.player.life, $scope.$parent.player.life+val);
 				};
 			},
 			templateUrl: 'general.html'
 		}
 	});
 	
-	app.factory('Messenger', function(){
-		var messages = {};
-		return {
-			'listen': function(msg, func){
-				if(messages.hasOwnProperty(msg)){
-					messages[msg].push(func);
-				} else {
-					messages[msg] = [func];
-				}
-			},
-			'notify': function(msg, val){
-				if(messages.hasOwnProperty(msg)){
-					angular.forEach(messages[msg], function(func, index){
-						if(angular.isFunction(func)) func(val);
-					});
-				}
-			},
-			'ignore': function(msg, func){
-				if(!messages.hasOwnProperty(msg)) return;
-				if(func){
-					angular.forEach(messages[msg].concat(), function(msgFunc, index){
-						if(msgFunc === func){
-							messages.splice(index);
-						}
-					});
-				} else {
-					messages[msg] = [];
-				}
-			}
-		}
-	});
-	
 	app.directive('player', function(){
 		return {
 			restrict: 'E',
-			controller: function($scope, Messenger){
+			controller: function($scope, DamageManager){
+				var record = {};
+				var recordTimeout = null;
+				
 				$scope.setActiveAttribute = function($event, attr){
 					hapticFeedback();
 					highlightElement($event.target);
 					$scope.attr = attr;
-					Messenger.ignore('updateAttr');
-					Messenger.listen('updateAttr', updateAttr);
+					DamageManager.setScope($scope);
 				};
 				
-				function updateAttr(val){
+				$scope.updateAttr = function(val){
 					switch($scope.attr){
 						case 'life':
 							$scope.player.life += val;
-							$scope.updateHistory();
+							$scope.updateHistory('Life', $scope.player.life, $scope.player.life-val);
 							break;
 						case 'poison':
 							$scope.player.poison += val;
 							if($scope.player.poison < 0) $scope.player.poison = 0;
-							$scope.updateHistory();
+							$scope.updateHistory('Poison', $scope.player.poison, $scope.player.poison-val);
 							break;
 						default:
 							break;
 					}
 				};
 				
-				$scope.updateHistory = function(){
+				$scope.setRenaming = function($event, val){
+					var player = $scope.player;
+					if(player.renaming === val) return;
+					player.renaming = val;
+					var input = $event.target.parentNode.getElementsByTagName('input')[0];
+					if(val){
+						setTimeout(function(){
+							input.select();
+						}, 0);
+					} else if(document.activeElement === input){
+						setTimeout(function(){				
+							input.blur();
+						}, 0);
+					}
+					if(!player.name){
+						player.name = 'Player';
+					}
+				};
 				
+				$scope.updateHistory = function(id, end, start){
+					if(recordTimeout) clearTimeout(recordTimeout);
+					if(record.id === id){
+						record.end = end;
+					} else {
+						addRecord();
+						record.id = id;
+						record.start = start;
+						record.end = end;
+					}
+					recordTimeout = setTimeout(addRecord, 3000);
+				};
+				
+				function addRecord(){
+					console.log(record.id + ': ' + record.start + ' > ' + record.end);
+					if(!record.id || record.start === record.end) return;
+					$scope.player.history.push(record);
+					
 				}
 			},
 			templateUrl: 'player.html'
@@ -172,10 +158,10 @@
 		return {
 			restrict: 'E',
 			transclude: true,
-			controller: function($scope, Messenger){
+			controller: function($scope, DamageManager){
 				$scope.update = function(val){
 					hapticFeedback();
-					Messenger.notify('updateAttr', val);
+					DamageManager.updateAttr(val);
 				}
 			},
 			templateUrl: 'counters.html'
