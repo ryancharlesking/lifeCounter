@@ -23,11 +23,11 @@ html, body{
 }
 
 .buttonContainer a{
-	padding: 5px;
+	padding: 0 5px;
 	text-decoration: none;
 	color: #fff;
-	height: 22px;
 	display: inline-block;
+	font-size: 25px;
 }
 
 .buttonContainer a:visited{

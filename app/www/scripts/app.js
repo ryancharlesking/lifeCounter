@@ -1,5 +1,45 @@
 ﻿(function(){
 	var app = angular.module('lifeCounter', ['ionic', 'Factories']);
+	
+	app.controller('NavController', function($state){
+		this.navList = [
+			{
+				'title': 'Game',
+				'href': '#',
+				'state': 'game'
+			},{
+				'title': 'Profiles',
+				'href': '#/profiles',
+				'state': 'profiles'
+			},{
+				'title': 'Preferences',
+				'href': '#/preferences',
+				'state': 'preferences'
+			}
+		];
+		
+		this.go = function(state){
+			hapticFeedback();
+			$state.go(state);
+		};
+	});
+	
+	app.config(function($stateProvider){
+		$stateProvider
+		.state('game', {
+			url: '',
+			templateUrl: 'game.html'
+		})
+		.state('profiles', {
+			url: '/profiles',
+			templateUrl: 'profile.html'
+		})
+		.state('preferences', {
+			url: '/preferences',
+			templateUrl: 'preferences.html'
+		});
+	});
+	
 	app.controller('GameController', function(){
 		var self = this;
 		
@@ -177,7 +217,7 @@
 	}
 	
 	function hapticFeedback(){
-		if(navigator && navigator.notification){navigator.notification.vibrate(70);}
+		if(navigator && navigator.notification){navigator.notification.vibrate(60);}
 	}
 
 })();
