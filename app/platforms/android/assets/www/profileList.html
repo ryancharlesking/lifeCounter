@@ -1,0 +1,7 @@
+<ion-list>
+	<ion-item ng-repeat="profile in getProfiles()">
+		{{profile.title}}
+	</ion-item>
+	
+	<div class="emptyMsg" ng-show="getProfiles().length === 0">There are no saved profiles</div>
+</ion-list>

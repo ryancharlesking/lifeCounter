@@ -35,6 +35,7 @@ C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\cord
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\counters.html \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\css \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\fonts \
+C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\format.html \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\game.html \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\general.html \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\icon.png \
@@ -44,6 +45,7 @@ C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\play
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\plugins \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\preferences.html \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\profile.html \
+C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\profileList.html \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\res \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\scripts \
 C:\Users\Ryan\Documents\GitHub\lifeCounter\app\platforms\android\assets\www\css\index.css \

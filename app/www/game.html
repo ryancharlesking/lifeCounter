@@ -9,7 +9,13 @@
 				<div id="players" style="width: {{game.players.length*135}}px;">
 					<player ng-repeat="player in game.players"></player>
 				</div>
+                <div class="card" ng-hide="game.players.length" >
+                    <div class="item item-text-wrap" style="text-align:center;">
+                        Press the <i style="font-size:20px;" class="ion-plus-circled"></i> to start a new game.
+                    </div>
+                </div>
 			</div>
+            
 			<counters></counters>
 		</ion-content>
 	</div>

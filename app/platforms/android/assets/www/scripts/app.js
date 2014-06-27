@@ -1,11 +1,13 @@
 ﻿(function(){
 	var app = angular.module('lifeCounter', ['ionic', 'Factories']);
 	
+	
+	
 	app.controller('NavController', function($state){
 		this.navList = [
 			{
 				'title': 'Game',
-				'href': '#',
+				'href': '#/',
 				'state': 'game'
 			},{
 				'title': 'Profiles',
@@ -26,8 +28,12 @@
 	
 	app.config(function($stateProvider){
 		$stateProvider
-		.state('game', {
+		.state('home', {
 			url: '',
+			templateUrl: 'game.html'
+		})
+		.state('game', {
+			url: '/',
 			templateUrl: 'game.html'
 		})
 		.state('profiles', {
@@ -40,13 +46,35 @@
 		});
 	});
 	
-	app.controller('GameController', function(){
+	app.controller('GameController', function($scope, $ionicModal){
 		var self = this;
 		
 		var record, updateRecordTimeout;
 		
 		this.players = [];
 		this.atticAttr = null;
+		this.formats = [
+			{
+				'title': 'Commander',
+				'players': 2,
+				'generals': true
+			},{
+				'title': 'Standard',
+				'players': 2,
+				'generals': false
+			}
+		];
+		
+		$ionicModal.fromTemplateUrl('format.html', {
+			scope: $scope,
+			animation: 'slide-in-up'
+		}).then(function(modal) {
+			$scope.formatModal = modal;
+			$scope.loadFormat = function(format){
+				self.loadFormat(format);
+				$scope.formatModal.hide();
+			};
+		});
 		
 		this.addPlayer = function(){
 			hapticFeedback();
@@ -57,20 +85,24 @@
 				'generalDamage': [],
 				'history': []
 			}
-			for(var i=0, len = self.players.length; i<len; i++){
-				newPlayer.generalDamage.push({
-					'player': self.players[i],
-					'damage': 0
-				});
-			}
-			self.players.push(newPlayer);
-			for(var i=0, len = self.players.length-1; i<len; i++){
-				self.players[i].generalDamage.push({
-					'player': newPlayer,
-					'damage': 0
-				});
+			if(self.includeGenerals){
+				for(var i=0, len = self.players.length; i<len; i++){
+					newPlayer.generalDamage.push({
+						'player': self.players[i],
+						'damage': 0
+					});
+				}
 			}
 			
+			self.players.push(newPlayer);
+			if(self.includeGenerals){
+				for(var i=0, len = self.players.length-1; i<len; i++){
+					self.players[i].generalDamage.push({
+						'player': newPlayer,
+						'damage': 0
+					});
+				}
+			}			
 		};
 		
 		this.renamingPlayer = function(){
@@ -86,14 +118,18 @@
 		
 		this.restart = function(){
 			hapticFeedback();
+			$scope.formatModal.show();
+		};
+		
+		this.loadFormat = function(format){
 			self.players = [];
-			self.addPlayer();
-			self.addPlayer();
+			self.includeGenerals = format.generals;
+			for(var i=0; i<format.players; i++){
+				self.addPlayer();
+			}
 		};
 				
-		self.players = [];
-		self.addPlayer();
-		self.addPlayer();
+		self.loadFormat(self.formats[0]);
 		
 	});
 	
@@ -124,7 +160,7 @@
 	app.directive('player', function(){
 		return {
 			restrict: 'E',
-			controller: function($scope, DamageManager){
+			controller: function($scope, DamageManager, $ionicPopup){
 				var record = {};
 				var recordTimeout = null;
 				
@@ -183,11 +219,20 @@
 					recordTimeout = setTimeout(addRecord, 3000);
 				};
 				
+				$scope.showHistory = function(){
+					$ioniPopup.show({
+						template: '',
+						tite: 'This is a test',
+						subTitle: 'History will be shown later',
+						scope: $scope,
+						buttons: [{text: 'OK'}]
+					});
+				};
+				
 				function addRecord(){
 					console.log(record.id + ': ' + record.start + ' > ' + record.end);
 					if(!record.id || record.start === record.end) return;
 					$scope.player.history.push(record);
-					
 				}
 			},
 			templateUrl: 'player.html'
@@ -207,6 +252,24 @@
 			templateUrl: 'counters.html'
 		}
 	});
+	
+	app.directive('profileList', function(){
+		return {
+			restrict: 'E',
+			transclude: false,
+			controller: function($scope, Preferences){
+				$scope.getProfiles = function(){
+					return Preferences.getProfiles();
+				}
+			},
+			templateUrl: 'profileList.html'
+		}
+	});
+	
+	
+	/////////////////////
+	// Utility functions
+	/////////////////////
 	
 	function highlightElement(elem){
 		var activeElem = document.getElementsByClassName('active')[0];
