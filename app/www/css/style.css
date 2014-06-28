@@ -173,3 +173,19 @@ html, body{
 .list-inset .item.invalid{
     border-color: #ef4e3a !important;
 }
+
+.item-toggle.item-input > div{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 100px;
+    -moz-box-flex: 1;
+    -moz-flex: 1 0 100px;
+    -ms-flex: 1 0 100px;
+    flex: 1 0 100px;
+    display: table;
+    padding: 7px 10px 7px 3px;
+    max-width: 200px;
+    width: 35%;
+    color: #444;
+    font-weight: bold;
+    font-size: 14px;
+}

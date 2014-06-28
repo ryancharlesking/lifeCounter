@@ -3,26 +3,30 @@
 	
 	
 	
-	app.controller('NavController', function($state){
+	app.controller('NavController', function($state,$ionicSideMenuDelegate, $timeout){
 		this.navList = [
 			{
 				'title': 'Game',
 				'href': '#/',
-				'state': 'game'
+				'state': 'game',
+                'icon': 'ion-home'
 			},{
 				'title': 'Profiles',
 				'href': '#/profiles',
-				'state': 'profiles'
+				'state': 'profiles',
+                'icon': 'ion-filing'
 			},{
 				'title': 'Preferences',
 				'href': '#/preferences',
-				'state': 'preferences'
+				'state': 'preferences',
+                'icon': 'ion-gear-b'
 			}
 		];
 		
 		this.go = function(state){
 			hapticFeedback();
-			$state.go(state);
+            $ionicSideMenuDelegate.toggleLeft();
+            $state.go(state);
 		};
 	});
 	
@@ -101,7 +105,7 @@
 				$scope.profileModal.hide();
 			};
 		});
-		
+        		
 		this.addPlayer = function(name){
 			hapticFeedback();
             name = name || 'Player ' + self.players.length;
@@ -109,6 +113,7 @@
 				'name': name, 
 				'life': self.profile.startingLife, 
 				'poison':0,
+                'commanderCost': 0,
 				'generalDamage': [],
 				'history': []
 			}
@@ -243,7 +248,11 @@
                 }
             }
             return valid;
-        }
+        };
+        
+        $scope.closeKeyboard = function(){
+            closeKeyboard;
+        };
         
     });
     
@@ -269,7 +278,7 @@
 					highlightElement($event.target);
 					DamageManager.setScope($scope);
 				};
-				
+
 				$scope.updateAttr = function(val){
 					if(val < 0 && Math.abs(val) > $scope.general.damage){
 						val = (val/Math.abs(val))*$scope.general.damage;
@@ -286,9 +295,16 @@
 	app.directive('player', function(){
 		return {
 			restrict: 'E',
-			controller: function($scope, DamageManager, $ionicPopup){
+			controller: function($scope, DamageManager, $ionicPopup, $element, $ionicGesture){
 				var record = {};
 				var recordTimeout = null;
+                
+                $ionicGesture.on('hold', showHistory, $element);
+                
+                $scope.$on('$destory', function cleanup(){
+                    $ionicGesture.off('hold', showHistory, $element);
+                    $scope.off('$destory');
+                });
 				
 				$scope.setActiveAttribute = function($event, attr){
 					hapticFeedback();
@@ -308,6 +324,10 @@
 							if($scope.player.poison < 0) $scope.player.poison = 0;
 							$scope.updateHistory('Poison', $scope.player.poison, $scope.player.poison-val);
 							break;
+                        case 'commanderCost':
+                            $scope.player.commanderCost += val;
+                            if($scope.player.commanderCost < 0) $scope.player.commanderCost = 0;
+                            break;
 						default:
 							break;
 					}
@@ -345,21 +365,21 @@
 					recordTimeout = setTimeout(addRecord, 3000);
 				};
 				
-				$scope.showHistory = function(){
-					$ionicPopup.show({
+				function addRecord(){
+					console.log(record.id + ': ' + record.start + ' > ' + record.end);
+					if(!record.id || record.start === record.end) return;
+					$scope.player.history.push(record);
+				}
+                
+                function showHistory(){
+                    $ionicPopup.show({
 						template: '',
 						tite: 'This is a test',
 						subTitle: 'History will be shown later',
 						scope: $scope,
 						buttons: [{text: 'OK'}]
 					});
-				};
-				
-				function addRecord(){
-					console.log(record.id + ': ' + record.start + ' > ' + record.end);
-					if(!record.id || record.start === record.end) return;
-					$scope.player.history.push(record);
-				}
+                }
 			},
 			templateUrl: 'player.html'
 		}
@@ -415,5 +435,9 @@
 	function hapticFeedback(){
 		if(navigator && navigator.notification){navigator.notification.vibrate(60);}
 	}
+    
+    function closeKeyboard(){
+        if(cordova && cordova.plugins.Keyboard)cordova.plugins.Keyboard.close();
+    }
 
 })();

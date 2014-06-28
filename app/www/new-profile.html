@@ -5,7 +5,7 @@
             
 		</ion-header-bar>
 	<ion-content ng-controller="ProfileForm as profileCtrl">
-		<form name="newProfile">
+		<form ng-submit="closeKeyboar()" name="newProfile">
             
             <div class="list">
                 <label class="item item-input">
@@ -37,8 +37,8 @@
                             <label>
                                 <input name="player.name" type="text" ng-model="player.name" placeholder="Please enter a name" required />
                             </label>
-                            <button ng-click="deletePlayer($index);" class="button button-assertive">
-                                <i class="icon ion-close-round"></i>
+                            <button ng-click="deletePlayer($index);" class="button button-clear">
+                                <i class="icon ion-close-circled"></i>
                             </button>
                         </div>
                     </div>
@@ -49,33 +49,11 @@
                 <div class="item item-divider">
                     Display
                 </div>
-                <div class="item item-toggle item-input">
-                    <span class="input-label">Poison</span>
-                    <label class="toggle toggle-balanced">
-                        <input ng-model="profile.poison" type="checkbox">
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                    </label>
-                </div>
-                <div class="item item-toggle item-input">
-                    <span class="input-label">Commander damage</span>
-                    <label class="toggle toggle-balanced">
-                        <input ng-model="profile.commanderDamage" type="checkbox">
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                    </label>
-                </div>
-                <div class="item item-toggle item-input">
-                    <span class="input-label">Commander cost</span>
-                    <label class="toggle toggle-balanced">
-                        <input  ng-model="profile.commanderCost" type="checkbox">
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                    </label>
-                </div>
+
+                <ion-toggle toggle-class="toggle-balanced" class="item-input" ng-model="profile.poison" >Poison</ion-toggle>
+                <ion-toggle toggle-class="toggle-balanced" class="item-input" ng-model="profile.commanderDamage" >Commander damage</ion-toggle>
+                <ion-toggle toggle-class="toggle-balanced" class="item-input" ng-model="profile.commanderCost" >Commander cost</ion-toggle>
+
                 <div class="button-bar item">
                     <a class="button-positive button" ng-click="save();" ng-disabled="newProfile.$invalid || !validateName() || profile.players.length === 0">Save Profile</a>
                 </div>

@@ -1,7 +1,13 @@
-<ion-list>
+<ion-list can-swipe="true">
 	<ion-item ng-repeat="profile in getProfiles()">
-		{{profile.title}}
+		{{profile.name}}
+        <ion-option-button class="button-assertive"
+                       ng-click="deleteProfile(profile)">
+          Delete
+        </ion-option-button>
 	</ion-item>
-	
-	<div class="emptyMsg" ng-show="getProfiles().length === 0">There are no saved profiles</div>
+
 </ion-list>
+<div class="padding">
+    <button class="button button-block button-balanced" ng-click="createProfile();">New profile</button>
+</div>

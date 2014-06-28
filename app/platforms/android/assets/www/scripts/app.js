@@ -1,4 +1,4 @@
-﻿(function(){
+(function(){
 	var app = angular.module('lifeCounter', ['ionic', 'Factories']);
 	
 	
@@ -43,10 +43,14 @@
 		.state('preferences', {
 			url: '/preferences',
 			templateUrl: 'preferences.html'
-		});
+		})
+        .state('newProfile', {
+			url: '/preferences/new-profile',
+			templateUrl: 'new-profile.html'
+		});;
 	});
 	
-	app.controller('GameController', function($scope, $ionicModal){
+	app.controller('GameController', function($scope, $ionicModal, $ionicActionSheet, Preferences){
 		var self = this;
 		
 		var record, updateRecordTimeout;
@@ -55,52 +59,72 @@
 		this.atticAttr = null;
 		this.formats = [
 			{
-				'title': 'Commander',
-				'players': 2,
-				'generals': true
-			},{
-				'title': 'Standard',
-				'players': 2,
-				'generals': false
-			}
+                'name': 'Default Standard',
+                'startingLife': 20,
+                'smallIncrement': 1,
+                'largeIncrement': 5,
+                'players':[
+                    {
+                        'name' : 'Player 1'
+                    },{
+                        'name' : 'Player 2'
+                    }
+                ],
+                'poison': true,
+                'commanderDamage': false,
+                'commanderCost': false
+            },{
+                'name': 'Default Commander',
+                'startingLife': 40,
+                'smallIncrement': 1,
+                'largeIncrement': 5,
+                'players':[
+                    {
+                        'name' : 'Player 1'
+                    },{
+                        'name' : 'Player 2'
+                    }
+                ],
+                'poison': true,
+                'commanderDamage': true,
+                'commanderCost': true
+            }
 		];
 		
-		$ionicModal.fromTemplateUrl('format.html', {
+		$ionicModal.fromTemplateUrl('profileModal.html', {
 			scope: $scope,
 			animation: 'slide-in-up'
 		}).then(function(modal) {
-			$scope.formatModal = modal;
-			$scope.loadFormat = function(format){
-				self.loadFormat(format);
-				$scope.formatModal.hide();
+			$scope.profileModal = modal;
+			$scope.loadProfile = function(profile){
+				self.loadProfile(profile);
+				$scope.profileModal.hide();
 			};
 		});
 		
-		this.addPlayer = function(){
+		this.addPlayer = function(name){
 			hapticFeedback();
+            name = name || 'Player ' + self.players.length;
 			var newPlayer = {
-				'name': 'Player ' + (self.players.length +1), 
-				'life': 40, 
+				'name': name, 
+				'life': self.profile.startingLife, 
 				'poison':0,
 				'generalDamage': [],
 				'history': []
 			}
-			if(self.includeGenerals){
+			self.players.push(newPlayer);
+			if(self.profile.commanderDamage){
 				for(var i=0, len = self.players.length; i<len; i++){
-					newPlayer.generalDamage.push({
+                    newPlayer.generalDamage.push({
 						'player': self.players[i],
 						'damage': 0
 					});
-				}
-			}
-			
-			self.players.push(newPlayer);
-			if(self.includeGenerals){
-				for(var i=0, len = self.players.length-1; i<len; i++){
-					self.players[i].generalDamage.push({
-						'player': newPlayer,
-						'damage': 0
-					});
+                    if(self.players[i] !== newPlayer){
+                        self.players[i].generalDamage.push({
+                            'player': newPlayer,
+                            'damage': 0
+                        });
+                    }
 				}
 			}			
 		};
@@ -117,21 +141,123 @@
 		};
 		
 		this.restart = function(){
-			hapticFeedback();
-			$scope.formatModal.show();
+            hapticFeedback();
+            var buttons = [
+                { 
+                    text: 'New game',
+                    id: 'new'
+                },
+                { 
+                    text: 'Switch profile',
+                    id: 'profile'
+                }
+            ];
+            
+            if(!self.profile){
+                buttons = [
+                    { 
+                        text: 'Choose profile',
+                        id: 'profile'
+                    }
+                ];
+            }
+            
+            $ionicActionSheet.show({
+                buttons: buttons,
+                cancelText: 'Cancel',
+                buttonClicked: function(index, button) {
+                    if(button.id === 'new'){
+                        self.loadProfile(self.profile);
+                    } else if(button.id === 'profile'){
+                        $scope.profileModal.show();
+                    }
+                    return true;
+                }
+            });
+			
 		};
+                    
+        this.getProfiles = function(){
+            return Preferences.getProfiles().concat(self.formats);
+        };
 		
-		this.loadFormat = function(format){
+		this.loadProfile = function(profile){
+            Preferences.setProfile(profile.name);
 			self.players = [];
-			self.includeGenerals = format.generals;
-			for(var i=0; i<format.players; i++){
-				self.addPlayer();
+            self.profile = profile;
+			for(var i=0; i<profile.players.length; i++){
+				self.addPlayer(profile.players[i].name);
 			}
 		};
 				
-		self.loadFormat(self.formats[0]);
+        var defaultProfile = Preferences.getProfile();
+        if(defaultProfile){
+            angular.forEach(self.getProfiles(), function(profile){
+                if(profile.name === defaultProfile) self.loadProfile(profile);
+            });
+        }
+		
 		
 	});
+    
+    app.controller('ProfileForm', function($scope, Preferences, $state){
+        $scope.profile = {
+            'name': 'New Profile',
+            'startingLife': 20,
+            'smallIncrement': 1,
+            'largeIncrement': 5,
+            'players':[
+                {
+                    'name' : 'Player 1'
+                },{
+                    'name' : 'Player 2'
+                }
+            ],
+            'poison': true,
+            'commanderDamage': false,
+            'commanderCost': false
+        };
+        
+        $scope.addPlayer = function(){
+            $scope.profile.players.push({
+                'name' : 'Player ' + ($scope.profile.players.length +1)
+            });
+        };
+        
+        $scope.deletePlayer = function($index){
+            $scope.profile.players.splice($index,1);
+        };
+        
+        $scope.save = function(){
+            Preferences.addProfile(angular.copy($scope.profile));
+            $state.go('profiles');
+        };
+        
+        $scope.validateName = function(){
+            var valid = true;
+            var profiles = Preferences.getProfiles();
+            for(var i=0, len=profiles.length; i<len;i++){
+                if(profiles[i].name === $scope.profile.name){
+                    valid = false;
+                    break;
+                }
+            }
+            return valid;
+        }
+        
+    });
+    
+    app.directive('newProfile', function(){
+        
+        return {
+            restrict: 'A',
+            controller: function($scope, $state){
+                $scope.back = function(){
+                    $state.go('profiles');
+                };
+            }
+        }
+    });
 	
 		
 	app.directive('general', function(){
@@ -220,7 +346,7 @@
 				};
 				
 				$scope.showHistory = function(){
-					$ioniPopup.show({
+					$ionicPopup.show({
 						template: '',
 						tite: 'This is a test',
 						subTitle: 'History will be shown later',
@@ -257,10 +383,17 @@
 		return {
 			restrict: 'E',
 			transclude: false,
-			controller: function($scope, Preferences){
+			controller: function($scope, Preferences, $state){
 				$scope.getProfiles = function(){
 					return Preferences.getProfiles();
-				}
+				};
+                $scope.createProfile = function(){
+                    $state.go('newProfile');
+                };
+                $scope.deleteProfile = function(profile){
+                    Preferences.deleteProfile(profile.name);
+                };
+                
 			},
 			templateUrl: 'profileList.html'
 		}

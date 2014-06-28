@@ -32,7 +32,8 @@
 		  </ion-header-bar>
 		  <ion-content>
 				<ion-list ng-controller="NavController as navCtrl">
-					<ion-item ng-repeat="item in navCtrl.navList" ng-click="navCtrl.go(item.state)">
+					<ion-item class="item-icon-left" ng-repeat="item in navCtrl.navList" ng-click="navCtrl.go(item.state)">
+                        <i class="icon {{item.icon}}"></i>
 						{{item.title}}
 					</ion-item>
 				</ion-list>

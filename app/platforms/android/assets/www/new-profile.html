@@ -1,0 +1,87 @@
+<ion-view title="'Profiles'" new-profile>
+	<ion-header-bar class="bar-dark">
+    <button class="button button-icon icon ion-arrow-left-c" ng-click="back();"></button> 
+			<h1 class="title">Create Profile</h1>
+            
+		</ion-header-bar>
+	<ion-content ng-controller="ProfileForm as profileCtrl">
+		<form name="newProfile">
+            
+            <div class="list">
+                <label class="item item-input">
+                    <span ng-class="{invalid:newProfile.name.$invalid || !validateName()}" class="input-label">Profile name</span>
+                    <input name="name" ng-model="profile.name" type="text" placeholder="Please enter a profile name" ng-class="{invalid: !validateName()}" required/>
+                </label>
+                <div class="item item-divider">
+                    Game Settings
+                </div>
+                
+                <label class="item item-input">
+                    <span class="input-label" ng-class="{invalid:newProfile.startingLife.$invalid}">Starting life</span>
+                    <input name="startingLife" ng-model="profile.startingLife" type="number" placeholder="Please enter a number" min="0" required/>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label" ng-class="{invalid:newProfile.smallIncrement.$invalid}">Small increment</span>
+                    <input name="smallIncrement" ng-model="profile.smallIncrement" type="number" placeholder="Please enter a number" min="0" required/>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label" ng-class="{invalid:newProfile.largeIncrement.$invalid}">Large increment</span>
+                    <input name="largeIncrement" ng-model="profile.largeIncrement" type="number" placeholder="Please enter a number" min="0" required/>
+                </label>
+                <div class="item item-divider">
+                    Players
+                </div>
+                <div class="item">
+                    <div class="list list-inset">
+                        <div ng-repeat="player in profile.players" class="item item-input-button">
+                            <label>
+                                <input name="player.name" type="text" ng-model="player.name" placeholder="Please enter a name" required />
+                            </label>
+                            <button ng-click="deletePlayer($index);" class="button button-assertive">
+                                <i class="icon ion-close-round"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="button-bar">
+                        <a class="button-balanced button" ng-click="addPlayer();">Add Player</a>
+                    </div>
+                </div>
+                <div class="item item-divider">
+                    Display
+                </div>
+                <div class="item item-toggle item-input">
+                    <span class="input-label">Poison</span>
+                    <label class="toggle toggle-balanced">
+                        <input ng-model="profile.poison" type="checkbox">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
+                <div class="item item-toggle item-input">
+                    <span class="input-label">Commander damage</span>
+                    <label class="toggle toggle-balanced">
+                        <input ng-model="profile.commanderDamage" type="checkbox">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
+                <div class="item item-toggle item-input">
+                    <span class="input-label">Commander cost</span>
+                    <label class="toggle toggle-balanced">
+                        <input  ng-model="profile.commanderCost" type="checkbox">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
+                <div class="button-bar item">
+                    <a class="button-positive button" ng-click="save();" ng-disabled="newProfile.$invalid || !validateName() || profile.players.length === 0">Save Profile</a>
+                </div>
+            </div>
+            
+            
+        </form>
+	</ion-content>
+</ion-view>

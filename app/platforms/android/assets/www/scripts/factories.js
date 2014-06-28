@@ -1,6 +1,7 @@
 (function(){
 	var PREF_KEY = 'lifeCounterPreferences';
 	var PROFILES_KEY = 'profiles';
+	var PROFILE_KEY = 'profile';
 	
 	var app = angular.module('Factories',[]);
 		
@@ -38,7 +39,7 @@
 				updatePreference(PROFILES_KEY, []);
 				profiles = [];
 			}
-			return profiles;
+			return profiles.concat();
 		}
 		
 		/**
@@ -47,7 +48,9 @@
 		 * @return {Array}
 		 */
 		function addProfile(newProfile){
-			updatePreference(PROFILES_KEY, getProfiles().push(newProfile));
+            var profiles = getProfiles();
+            profiles.push(newProfile);
+			updatePreference(PROFILES_KEY, profiles);
 			return getProfiles();
 		}
 		
@@ -58,8 +61,8 @@
 		 */
 		function deleteProfile(profileName){
 			var profiles = getProfiles();
-			for(var i=0, len=profiles.length; i<leng; i++){
-				if(profile.name === profileName){
+			for(var i=0, len=profiles.length; i<len; i++){
+				if(profiles[i].name === profileName){
 					profiles.splice(i,1);
 					break;
 				}
@@ -67,6 +70,24 @@
 			updatePreference(PROFILES_KEY, profiles);
 			return getProfiles();
 		}
+        
+        /**
+         * Gets the default profile for the user
+         *
+         * returns {Object}
+         */
+        function getProfile(){
+            return getPreference(PROFILE_KEY);
+        }
+        
+        /**
+         * Sets the default profile for the user
+         *
+         * @param profile {Object}
+         */
+        function setProfile(profile){
+            return updatePreference(PROFILE_KEY, profile);
+        }
 		
 		/**
 		 * Gets a specified preference
@@ -94,11 +115,11 @@
 		}
 		
 		return {
-			'getPreference': getPreference,
-			'updatePreference': updatePreference,
 			'getProfiles': getProfiles,
 			'deleteProfile': deleteProfile,
-			'addProfile': addProfile
+			'addProfile': addProfile,
+			'getProfile': getProfile,
+			'setProfile': setProfile
 		};
 	});
 	

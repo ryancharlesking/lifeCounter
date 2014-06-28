@@ -1,0 +1,12 @@
+<div class="modal">
+<ion-header-bar>
+  <h1 class="title">Choose a profile</h1>
+</ion-header-bar>
+<ion-content>
+	<ion-list>
+		<ion-item ng-repeat="profile in game.getProfiles()" ng-click="loadProfile(profile)">
+			{{profile.name}}
+		</ion-item>
+	</ion-list>
+</ion-content>
+</div>
